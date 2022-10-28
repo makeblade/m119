@@ -46,11 +46,9 @@ void setup() {
 
   // add characteristics and service
   accelerometerService.addCharacteristic(accelerometerCharacteristicX);
-  //accelerometerService.addCharacteristic(accelerometerCharacteristicY);
-  //accelerometerService.addCharacteristic(accelerometerCharacteristicZ);  
+  accelerometerService.addCharacteristic(accelerometerCharacteristicY);
+  accelerometerService.addCharacteristic(accelerometerCharacteristicZ);  
   BLE.addService(accelerometerService);
-  while (accelerometerService.characteristicCount() == 0)
-    accelerometerService.addCharacteristic(accelerometerCharacteristicX);
     
   if (accelerometerService.hasCharacteristic("2101"))
     Serial.print("yes");
@@ -71,10 +69,16 @@ void loop() {
 
     // while the central is still connected to peripheral:
     while (central.connected()) {
-      // if the remote device wrote to the characteristic,
-      // use the value to control the LED:
-      accelerometerCharacteristicX.setValue(5);
-      delay(500);
+      float x, y, z;
+
+      if (IMU.accelerationAvailable()) {
+        IMU.readAcceleration(x, y, z);
+
+        accelerometerCharacteristicX.setValue(x);
+        accelerometerCharacteristicY.setValue(y);
+        accelerometerCharacteristicZ.setValue(z);
+      }
+
     }
   }
 }
