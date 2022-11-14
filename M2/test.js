@@ -36,7 +36,14 @@ let readData = async (characteristic) => {
   const value = (await characteristic[0].readAsync());
   const value2 = (await characteristic[1].readAsync());
   const value3 = (await characteristic[2].readAsync());
-  console.log(value.readFloatLE(0).toFixed(8) + " " + value2.readFloatLE(0).toFixed(8) + " " + value3.readFloatLE(0).toFixed(8));
+  //console.log(value.readFloatLE(0).toFixed(8) + " " + value2.readFloatLE(0).toFixed(8) + " " + value3.readFloatLE(0).toFixed(8));
+
+  if (value3.readFloatLE(0) < 1) {
+    console.log("up");
+  }
+  else {
+    console.log("down");
+  }
 
   // read data again in t milliseconds
   setTimeout(() => {
